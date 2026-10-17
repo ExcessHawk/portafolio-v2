@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-type Role = {
+export type Role = {
   id: 'comprador' | 'vendedor' | 'admin'
   label: string
   account: string
@@ -8,57 +8,23 @@ type Role = {
   tryThis: string[]
 }
 
-const DEMO_WEB = (import.meta.env.PUBLIC_DEMO_WEB ?? 'http://localhost:5102').replace(/\/$/, '')
 
-const roles: Role[] = [
-  {
-    id: 'comprador',
-    label: 'Comprador',
-    account: 'comprador@demo.marketplace.mx',
-    blurb:
-      'Entras como alguien que viene a comprar artesanía. El catálogo, el carrito y el checkout son los de verdad.',
-    tryThis: [
-      'Busca "talavera" y mete algo al carrito.',
-      'Pasa por el checkout y paga con el proveedor de prueba.',
-      'Marca el pedido como recibido y deja una reseña.',
-      'Abre el chat del pedido y escríbele a la tienda.',
-    ],
-  },
-  {
-    id: 'vendedor',
-    label: 'Vendedor',
-    account: 'vendedor@demo.marketplace.mx',
-    blurb:
-      'El panel de una tienda aprobada. Publica piezas, fija el costo de envío y despacha lo que te compren.',
-    tryThis: [
-      'Publica un producto con una variante y su stock.',
-      'Ajusta las tarifas de envío por kilo y el mínimo para envío gratis.',
-      'Marca una venta como enviada y mira cómo se libera el pago.',
-      'Contesta el mensaje que dejó el comprador.',
-    ],
-  },
-  {
-    id: 'admin',
-    label: 'Administrador',
-    account: 'admin@demo.marketplace.mx',
-    blurb:
-      'La vista de la plataforma: qué tiendas entran, cuáles se suspenden y qué quedó escrito en la bitácora.',
-    tryThis: [
-      'Aprueba una tienda de la cola de pendientes.',
-      'Revisa la bitácora: cada acción quedó registrada con quién y cuándo.',
-      'Resuelve una aclaración a favor del comprador.',
-    ],
-  },
-]
-
-export default function DemoFrame() {
+export default function DemoFrame({
+  demoWeb,
+  roles,
+  nota,
+}: {
+  demoWeb: string
+  roles: Role[]
+  nota: string
+}) {
   const [role, setRole] = useState<Role>(roles[0]!)
   const [started, setStarted] = useState(false)
   const [slow, setSlow] = useState(false)
   const [nonce, setNonce] = useState(0)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const src = `${DEMO_WEB}/demo?rol=${role.id}&n=${nonce}`
+  const src = `${demoWeb}/demo?rol=${role.id}&n=${nonce}`
 
   useEffect(() => {
     if (!started) return
@@ -124,8 +90,7 @@ export default function DemoFrame() {
         </div>
 
         <p className="rounded-lg border border-ink-800 bg-ink-900 p-3 text-[0.7rem] leading-relaxed text-ink-500">
-          Los datos son de juguete y se reinician solos cada hora. No hay cobros reales: el
-          proveedor de pagos es uno falso que firma sus propios webhooks.
+{nota}
         </p>
       </aside>
 
@@ -138,7 +103,7 @@ export default function DemoFrame() {
               <span className="size-2.5 rounded-full bg-signal/70" />
             </span>
             <code className="truncate font-mono text-[0.7rem] text-ink-500">
-              {DEMO_WEB}/demo?rol={role.id}
+              {demoWeb}/demo?rol={role.id}
             </code>
           </div>
 

@@ -5,8 +5,7 @@ import Section from '../components/Section.astro'
 import ProjectCard from '../components/ProjectCard.astro'
 import TechChip from '../components/TechChip.astro'
 import SocialLink from '../components/SocialLink.astro'
-import ApiConsole from '../islands/ApiConsole'
-import DemoFrame from '../islands/DemoFrame'
+import Playground from '../islands/Playground'
 import { projects, stack } from '../data/projects'
 import { site, experience, achievements } from '../data/site'
 ---
@@ -24,20 +23,8 @@ import { site, experience, achievements } from '../data/site'
       Úsalo tú mismo, sin registrarte
     </h2>
 
-    <DemoFrame client:visible />
+    <Playground client:visible />
 
-    <div class="mt-16">
-      <h3 class="mb-3 text-balance text-2xl font-semibold text-ink-100">
-        Y esto es lo que pasa por debajo
-      </h3>
-      <p class="mb-6 max-w-2xl leading-relaxed text-ink-400">
-        Un iframe enseña el frontend. Esta consola enseña el backend: nueve peticiones reales contra
-        la misma API, encadenadas, con la respuesta tal como llega. Incluidas las tres que fallan a
-        propósito.
-      </p>
-
-      <ApiConsole client:visible />
-    </div>
   </Section>
 
   <Section

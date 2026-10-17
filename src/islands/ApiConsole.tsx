@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 
-type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE'
+export type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE'
 
-type Recipe = {
+export type Recipe = {
   id: string
   method: Method
   path: string
@@ -15,7 +15,7 @@ type Recipe = {
   expect?: string
 }
 
-type Context = {
+export type Context = {
   token: string | null
   productSlug: string | null
   variantId: string | null
@@ -32,102 +32,6 @@ type Outcome = {
   error?: string
 }
 
-const API_BASE = (
-  import.meta.env.PUBLIC_DEMO_API ?? 'http://localhost:3102'
-).replace(/\/$/, '')
-
-
-const FOREIGN_ORDER_ID = '3f2b9a1c-7d84-4e26-9b05-2a6c18f4e7d3'
-
-const recipes: Recipe[] = [
-  {
-    id: 'categories',
-    method: 'GET',
-    path: '/api/categories',
-    title: 'Listar categorías',
-    note: 'Ruta pública. Sin sesión, sin encabezados especiales.',
-    auth: 'none',
-  },
-  {
-    id: 'search',
-    method: 'GET',
-    path: '/api/products?q=talavera&limit=3',
-    title: 'Buscar "talavera"',
-    note: 'Búsqueda de texto completo en PostgreSQL. La columna de búsqueda es generada y pasa por unaccent, así que "piñata" y "pinata" caen en el mismo lugar.',
-    auth: 'none',
-    capture: (data) => ({
-      productSlug: data?.items?.[0]?.slug ?? null,
-    }),
-  },
-  {
-    id: 'product',
-    method: 'GET',
-    path: '/api/products/:slug',
-    title: 'Abrir la ficha del primer resultado',
-    note: 'El slug sale de la respuesta anterior: la consola encadena peticiones reales.',
-    auth: 'none',
-    resolvePath: (ctx) => `/api/products/${ctx.productSlug ?? 'sin-resultado'}`,
-    capture: (data) => ({
-      variantId: data?.variants?.[0]?.id ?? null,
-    }),
-  },
-  {
-    id: 'cart-401',
-    method: 'GET',
-    path: '/api/cart',
-    title: 'Pedir el carrito sin sesión',
-    note: 'El guard corta antes de que la petición toque la base de datos.',
-    auth: 'strip',
-    expect: '401',
-  },
-  {
-    id: 'login',
-    method: 'POST',
-    path: '/api/demo/session',
-    title: 'Pedir una sesión de comprador',
-    note: 'La demostración entrega la sesión sin contraseña, y solo porque corre con DEMO_MODE encendido. En la API normal ese endpoint no existe: responde 404.',
-    auth: 'none',
-    body: { role: 'comprador' },
-    capture: (data) => ({ token: data?.tokens?.accessToken ?? null }),
-  },
-  {
-    id: 'cart',
-    method: 'GET',
-    path: '/api/cart',
-    title: 'Pedir el carrito, ya con sesión',
-    note: 'Mismo endpoint que falló hace dos pasos. Ahora responde, y el total trae el envío por separado.',
-    auth: 'token',
-  },
-  {
-    id: 'add',
-    method: 'POST',
-    path: '/api/cart/items',
-    title: 'Agregar una pieza al carrito',
-    note: 'El precio se congela al momento de agregar. Si la tienda sube el precio después, se cobra el menor de los dos.',
-    auth: 'token',
-    body: { quantity: 1 },
-    resolvePath: () => '/api/cart/items',
-  },
-  {
-    id: 'seller-403',
-    method: 'GET',
-    path: '/api/seller/sales',
-    title: 'Asomarse al panel de vendedor',
-    note: 'La sesión es de comprador y el panel pide rol de vendedor. El guard corta en la puerta, antes del handler.',
-    auth: 'token',
-    expect: '403',
-  },
-  {
-    id: 'order-404',
-    method: 'GET',
-    path: '/api/orders/:ajeno',
-    title: 'Pedir un pedido que no es tuyo',
-    note: 'Aquí sí hay recurso de por medio, y la respuesta es 404. Un pedido de otra persona contesta lo mismo que un id inventado: un 403 delataría que ese pedido existe.',
-    auth: 'token',
-    resolvePath: () => `/api/orders/${FOREIGN_ORDER_ID}`,
-    expect: '404',
-  },
-]
 
 const statusTone = (status: number | 'red') => {
   if (status === 'red') return 'text-rose-alert'
@@ -142,7 +46,13 @@ const pretty = (value: unknown) => {
   return text.length > 2600 ? `${text.slice(0, 2600)}\n… (recortado)` : text
 }
 
-export default function ApiConsole() {
+export default function ApiConsole({
+  apiBase,
+  recipes,
+}: {
+  apiBase: string
+  recipes: Recipe[]
+}) {
   const [outcomes, setOutcomes] = useState<Outcome[]>([])
   const [running, setRunning] = useState<string | null>(null)
   const [openId, setOpenId] = useState<string | null>(null)
@@ -160,7 +70,7 @@ export default function ApiConsole() {
     setRunning(recipe.id)
 
     const path = recipe.resolvePath ? recipe.resolvePath(ctx) : recipe.path
-    const url = `${API_BASE}${path}`
+    const url = `${apiBase}${path}`
     const headers: Record<string, string> = { Accept: 'application/json' }
     const sentAuth = recipe.auth === 'token' && Boolean(ctx.token)
     if (sentAuth) headers.Authorization = `Bearer ${ctx.token}`
@@ -231,7 +141,7 @@ export default function ApiConsole() {
     for (const recipe of recipes) {
       await run(recipe)
     }
-  }, [run])
+  }, [run, recipes])
 
   const reset = useCallback(() => {
     ctxRef.current = { token: null, productSlug: null, variantId: null }
@@ -246,7 +156,7 @@ export default function ApiConsole() {
         <div className="flex items-center gap-2 font-mono text-xs text-ink-300">
           <span className="size-2 rounded-full bg-signal" aria-hidden="true" />
           <span className="text-ink-100">consola de API</span>
-          <span className="hidden text-ink-600 sm:inline">{API_BASE}</span>
+          <span className="hidden text-ink-600 sm:inline">{apiBase}</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -265,7 +175,7 @@ export default function ApiConsole() {
             disabled={running !== null}
             className="rounded-md bg-signal px-3 py-1.5 font-mono text-xs font-semibold text-ink-950 transition-opacity disabled:opacity-50"
           >
-            {running ? 'corriendo…' : 'Correr los 9 pasos'}
+            {running ? 'corriendo…' : `Correr los ${recipes.length} pasos`}
           </button>
           <button
             type="button"
