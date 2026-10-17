@@ -1,0 +1,41 @@
+---
+import { techIcon } from '../lib/tech'
+
+interface Props {
+  name: string
+  size?: 'sm' | 'md'
+}
+
+const { name, size = 'sm' } = Astro.props
+const icon = techIcon(name)
+const box = size === 'md' ? 15 : 13
+---
+
+<li
+  class={`group/chip flex items-center gap-1.5 rounded border border-ink-800 bg-ink-850 font-mono text-ink-300 transition-colors hover:border-ink-600 hover:text-ink-100 ${
+    size === 'md' ? 'px-2.5 py-1 text-xs' : 'px-2 py-0.5 text-[0.7rem]'
+  }`}
+>
+  {
+    icon && (
+      <svg
+        role="img"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        width={box}
+        height={box}
+        class="shrink-0 fill-current opacity-55 transition-[color,opacity] duration-200 group-hover/chip:opacity-100"
+        style={`--brand: #${icon.hex}`}
+      >
+        <path d={icon.path} />
+      </svg>
+    )
+  }
+  {name}
+</li>
+
+<style>
+  li:hover svg {
+    color: var(--brand);
+  }
+</style>

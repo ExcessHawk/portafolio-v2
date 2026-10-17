@@ -1,0 +1,117 @@
+---
+import type { Project } from '../data/projects'
+import TechChip from './TechChip.astro'
+
+interface Props {
+  project: Project
+  featured?: boolean
+}
+
+const { project, featured = false } = Astro.props
+
+const accentText = {
+  signal: 'text-signal',
+  wire: 'text-wire',
+  ember: 'text-ember',
+}[project.accent]
+
+const accentBorder = {
+  signal: 'hover:border-signal/40',
+  wire: 'hover:border-wire/40',
+  ember: 'hover:border-ember/40',
+}[project.accent]
+
+const statusLabel = {
+  activo: 'en desarrollo activo',
+  terminado: 'terminado',
+  'en-progreso': 'en progreso',
+}[project.status]
+---
+
+<article
+  class={`panel group relative overflow-hidden p-6 transition-colors sm:p-8 ${accentBorder}`}
+>
+  <div class="flex flex-wrap items-start justify-between gap-4">
+    <div>
+      <p class="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-ink-500">
+        <span class={accentText}>{project.kind}</span>
+        <span class="text-ink-700">·</span>
+        <span>{project.year}</span>
+        <span class="text-ink-700">·</span>
+        <span>{statusLabel}</span>
+      </p>
+      <h3 class={`text-2xl font-semibold text-ink-100 ${featured ? 'sm:text-3xl' : ''}`}>
+        {project.name}
+      </h3>
+    </div>
+
+    {
+      project.playground && (
+        <a
+          href="#playground"
+          class="inline-flex items-center gap-2 rounded-full border border-signal/40 bg-signal/10 px-3 py-1.5 font-mono text-xs text-signal transition-colors hover:bg-signal/20"
+        >
+          <span class="size-1.5 rounded-full bg-signal" aria-hidden="true" />
+          pruébalo arriba
+        </a>
+      )
+    }
+  </div>
+
+  <p class="mt-4 max-w-3xl text-balance text-lg leading-relaxed text-ink-200">
+    {project.headline}
+  </p>
+
+  <p class="mt-3 max-w-3xl leading-relaxed text-ink-400">{project.body}</p>
+
+  {
+    project.metrics && (
+      <dl class="mt-6 flex flex-wrap gap-x-10 gap-y-4 border-y border-ink-800 py-4">
+        {project.metrics.map((metric) => (
+          <div>
+            <dd class={`font-mono text-xl font-semibold ${accentText}`}>{metric.value}</dd>
+            <dt class="mt-0.5 font-mono text-[0.7rem] tracking-wide text-ink-600 uppercase">
+              {metric.label}
+            </dt>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+
+  <ul class="mt-6 space-y-2.5">
+    {
+      project.highlights.map((highlight) => (
+        <li class="flex gap-3 text-sm leading-relaxed text-ink-300">
+          <span class={`mt-2 size-1 shrink-0 rounded-full ${accentText.replace('text-', 'bg-')}`} aria-hidden="true" />
+          {highlight}
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+    <ul class="flex flex-wrap gap-1.5">
+      {project.stack.map((tech) => <TechChip name={tech} />)}
+    </ul>
+
+    <div class="flex flex-wrap gap-4">
+      {
+        project.links.map((link) =>
+          link.href === '#' ? (
+            <span class="font-mono text-xs text-ink-600">código privado</span>
+          ) : (
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-mono text-xs text-ink-200 underline decoration-ink-600 underline-offset-4 transition-colors hover:text-signal hover:decoration-signal"
+            >
+              {link.label} ↗
+            </a>
+          ),
+        )
+      }
+    </div>
+  </div>
+</article>

@@ -1,0 +1,26 @@
+{
+  "name": "portafolio-v2",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Portafolio de Alfredo Mejia Rosales con playground interactivo",
+  "scripts": {
+    "dev": "astro dev --port 4330",
+    "build": "astro check && astro build",
+    "preview": "astro preview --port 4330",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/react": "^4.4.0",
+    "@astrojs/sitemap": "^3.6.0",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "astro": "^5.16.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "simple-icons": "^16.35.0",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.0"
+  }
+}

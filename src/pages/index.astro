@@ -1,0 +1,197 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Hero from '../components/Hero.astro'
+import Section from '../components/Section.astro'
+import ProjectCard from '../components/ProjectCard.astro'
+import TechChip from '../components/TechChip.astro'
+import SocialLink from '../components/SocialLink.astro'
+import ApiConsole from '../islands/ApiConsole'
+import DemoFrame from '../islands/DemoFrame'
+import { projects, stack } from '../data/projects'
+import { site, experience, achievements } from '../data/site'
+---
+
+<Layout>
+  <Hero />
+
+  <Section
+    id="playground"
+    num="01"
+    title="Playground"
+    lead="Casi todos los portafolios enseñan capturas de pantalla. Aquí puedes usar la aplicación, y además ver el tráfico que genera contra la API."
+  >
+    <h2 slot="heading" class="mb-4 text-balance text-3xl font-semibold text-ink-100 sm:text-4xl">
+      Úsalo tú mismo, sin registrarte
+    </h2>
+
+    <DemoFrame client:visible />
+
+    <div class="mt-16">
+      <h3 class="mb-3 text-balance text-2xl font-semibold text-ink-100">
+        Y esto es lo que pasa por debajo
+      </h3>
+      <p class="mb-6 max-w-2xl leading-relaxed text-ink-400">
+        Un iframe enseña el frontend. Esta consola enseña el backend: nueve peticiones reales contra
+        la misma API, encadenadas, con la respuesta tal como llega. Incluidas las tres que fallan a
+        propósito.
+      </p>
+
+      <ApiConsole client:visible />
+    </div>
+  </Section>
+
+  <Section
+    id="proyectos"
+    num="02"
+    title="Proyectos"
+    lead="Cinco cosas que construí de punta a punta. La primera es el framework sobre el que corren las demás."
+  >
+    <h2 slot="heading" class="mb-4 text-balance text-3xl font-semibold text-ink-100 sm:text-4xl">
+      Lo que he construido
+    </h2>
+
+    <div class="space-y-6">
+      {projects.map((project, index) => <ProjectCard project={project} featured={index < 2} />)}
+    </div>
+  </Section>
+
+  <Section
+    id="stack"
+    num="03"
+    title="Stack"
+    lead="Herramientas que uso a diario, no una lista de todo lo que he tocado una vez."
+  >
+    <h2 slot="heading" class="mb-4 text-balance text-3xl font-semibold text-ink-100 sm:text-4xl">
+      Con qué trabajo
+    </h2>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        stack.map((group) => (
+          <div class="panel p-5">
+            <p class="mb-3 font-mono text-xs tracking-wider text-ink-500 uppercase">{group.group}</p>
+            <ul class="flex flex-wrap gap-1.5">
+              {group.items.map((item) => <TechChip name={item} size="md" />)}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section
+    id="trayectoria"
+    num="04"
+    title="Trayectoria"
+    lead="De soporte técnico a construir plataformas completas, y a publicar las herramientas que uso para hacerlo."
+  >
+    <h2 slot="heading" class="mb-4 text-balance text-3xl font-semibold text-ink-100 sm:text-4xl">
+      Por dónde he pasado
+    </h2>
+
+    <div class="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+      <ol class="relative space-y-8 border-l border-ink-800 pl-6">
+        {
+          experience.map((job) => (
+            <li class="relative">
+              <span
+                class="absolute top-1.5 -left-[1.6rem] size-2.5 rounded-full border-2 border-ink-950 bg-signal"
+                aria-hidden="true"
+              />
+              <p class="font-mono text-xs text-ink-500">{job.date}</p>
+              <h3 class="mt-1 text-lg font-semibold text-ink-100">
+                {job.title}
+                <span class="text-ink-500"> · {job.company}</span>
+              </h3>
+              <ul class="mt-2 space-y-1.5">
+                {job.points.map((point) => (
+                  <li class="text-sm leading-relaxed text-ink-400">{point}</li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="space-y-4">
+        <div class="panel p-5">
+          <p class="mb-4 font-mono text-xs tracking-wider text-ink-500 uppercase">Formación</p>
+          <h3 class="text-lg font-semibold text-ink-100">Ingeniería en Sistemas Computacionales</h3>
+          <p class="mt-1 text-sm text-ink-400">
+            Instituto Tecnológico Superior de Huetamo · titulado
+          </p>
+        </div>
+
+        <div class="panel p-5">
+          <p class="mb-4 font-mono text-xs tracking-wider text-ink-500 uppercase">Reconocimientos</p>
+          <ul class="space-y-3">
+            {
+              achievements.map((item) => (
+                <li class="flex gap-3">
+                  <span class="font-mono text-xs text-signal">{item.icon}</span>
+                  <span class="text-sm leading-relaxed">
+                    <span class="text-ink-100">{item.title}</span>
+                    <span class="text-ink-500"> — {item.detail}</span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="contacto" num="05" title="Contacto">
+    <h2 slot="heading" class="mb-4 text-balance text-3xl font-semibold text-ink-100 sm:text-4xl">
+      Hablemos
+    </h2>
+
+    <div class="panel grid gap-8 p-8 sm:grid-cols-[1.2fr_1fr] sm:p-10">
+      <div>
+        <p class="text-balance text-xl leading-relaxed text-ink-200">
+          Estoy abierto a oportunidades como desarrollador full-stack, de preferencia donde el
+          backend pese tanto como la interfaz.
+        </p>
+        <p class="mt-4 leading-relaxed text-ink-400">
+          {site.location} · trabajo remoto sin problema. Español nativo, inglés técnico.
+        </p>
+
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a
+            href={`mailto:${site.email}`}
+            class="rounded-lg bg-signal px-5 py-2.5 font-mono text-sm font-semibold text-ink-950 transition-transform hover:-translate-y-0.5"
+          >
+            {site.email}
+          </a>
+          <SocialLink kind="linkedin" href={site.linkedin} variant="button" />
+          <SocialLink kind="github" href={site.github} variant="button" />
+        </div>
+      </div>
+
+      <dl class="space-y-4 border-ink-800 font-mono text-sm sm:border-l sm:pl-8">
+        <div>
+          <dt class="text-xs tracking-wider text-ink-600 uppercase">GitHub</dt>
+          <dd class="mt-1"><SocialLink kind="github" href={site.github} label="ExcessHawk ↗" /></dd>
+        </div>
+        <div>
+          <dt class="text-xs tracking-wider text-ink-600 uppercase">npm</dt>
+          <dd class="mt-1"><SocialLink kind="npm" href={site.npm} label="veloce-ts ↗" /></dd>
+        </div>
+        <div>
+          <dt class="text-xs tracking-wider text-ink-600 uppercase">LinkedIn</dt>
+          <dd class="mt-1">
+            <SocialLink kind="linkedin" href={site.linkedin} label="excesshawk ↗" />
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs tracking-wider text-ink-600 uppercase">Disponibilidad</dt>
+          <dd class="mt-1 flex items-center gap-2 text-signal">
+            <span class="size-1.5 rounded-full bg-signal"></span>
+            abierto a propuestas
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </Section>
+</Layout>

@@ -1,0 +1,45 @@
+---
+import { social } from '../lib/tech'
+
+interface Props {
+  kind: keyof typeof social
+  href: string
+  label?: string
+  variant?: 'inline' | 'button'
+}
+
+const { kind, href, label, variant = 'inline' } = Astro.props
+const icon = social[kind]()
+const text = label ?? icon.title
+const external = href.startsWith('http')
+---
+
+<a
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+  class={`group/social inline-flex items-center gap-2 transition-colors ${
+    variant === 'button'
+      ? 'rounded-lg border border-ink-700 px-4 py-2.5 font-mono text-sm text-ink-200 hover:border-ink-400 hover:text-ink-100'
+      : 'font-mono text-xs text-ink-400 hover:text-ink-100'
+  }`}
+>
+  <svg
+    role="img"
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+    width={variant === 'button' ? 16 : 14}
+    height={variant === 'button' ? 16 : 14}
+    class="shrink-0 fill-current opacity-60 transition-[color,opacity] duration-200 group-hover/social:opacity-100"
+    style={`--brand: #${icon.hex}`}
+  >
+    <path d={icon.path}></path>
+  </svg>
+  {text}
+</a>
+
+<style>
+  a:hover svg {
+    color: var(--brand);
+  }
+</style>
