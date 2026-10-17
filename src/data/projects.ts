@@ -133,13 +133,14 @@ export const projects: Project[] = [
     metrics: [
       { label: 'rutas HTTP', value: '32' },
       { label: 'tablas', value: '7' },
-      { label: 'aserciones', value: '26' },
+      { label: 'aserciones', value: '35' },
     ],
     highlights: [
       'Un horario no se reserva dos veces: un índice único sobre doctor, fecha y hora lo impide en la base, no solo en el código.',
       'El rol no basta para autorizar: ser doctor no da acceso a la cita de otro, así que cada handler comprueba la pertenencia.',
       'El mapa es Leaflet sobre OpenStreetMap, no Google: una llave de Google viajaría en el JavaScript del navegador.',
       'Las coordenadas admiten nulo; un consultorio sin geocodificar no rompe el mapa, y la interfaz lo dice.',
+      'Los adjuntos no se sirven en abierto: la descarga va por el id del documento, que es lo único que dice de qué paciente es el archivo.',
       'Cancelar pide el motivo y lo guarda: quien recibe el aviso se entera de por qué, no solo de que la cita desapareció.',
       'La tabla de citas se vuelve tarjetas en el teléfono: cinco columnas a 390 px obligan a arrastrar de lado para alcanzar las acciones.',
       'Recordatorios por correo a las 08:00, con el límite conocido de que viven en el proceso.',
