@@ -37,6 +37,7 @@ export const projects: Project[] = [
     links: [
       { label: 'npm', href: 'https://www.npmjs.com/package/veloce-ts' },
       { label: 'GitHub', href: 'https://github.com/ExcessHawk/Veloce-TS' },
+      { label: 'Documentación', href: 'https://docs.veloce-ts.com' },
     ],
     status: 'activo',
     accent: 'signal',
@@ -48,7 +49,7 @@ export const projects: Project[] = [
     year: '2026',
     headline:
       'Un marketplace completo: catálogo, carrito, checkout, pagos al vendedor, disputas y chat en vivo.',
-    body: 'Varias tiendas venden en un mismo sitio. Un pedido se parte en subpedidos, uno por vendedor, y cada uno sigue su propio camino: se envía, se recibe, se opina y se le paga al vendedor. El dinero no se mueve hasta que el comprador confirma que recibió.',
+    body: 'Varias tiendas venden en un mismo sitio. Un pedido se parte en subpedidos, uno por vendedor, y cada uno sigue su propio camino: se envía, se recibe, se opina y se le paga al vendedor. El dinero no se mueve hasta que el comprador confirma que recibió. Vive en tres repos: la API, la interfaz y los esquemas de Zod que ambas comparten, para que un cambio de contrato rompa la compilación y no la producción.',
     stack: ['React', 'TypeScript', 'Veloce-TS', 'PostgreSQL', 'Drizzle', 'WebSocket'],
     metrics: [
       { label: 'rutas HTTP', value: '71' },
@@ -63,7 +64,12 @@ export const projects: Project[] = [
       'Pedir un recurso de otra persona responde 404, no 403: un 403 confirmaría que ese id existe.',
       'Chat por WebSocket con boleto de un minuto, en vez de mandar el token en la URL.',
     ],
-    links: [{ label: 'Código', href: 'https://github.com/ExcessHawk' }],
+    links: [
+      { label: 'Verlo en vivo', href: 'https://demo.alfredomejia.com.mx' },
+      { label: 'API', href: 'https://github.com/ExcessHawk/marketplace-back' },
+      { label: 'Interfaz', href: 'https://github.com/ExcessHawk/marketplace-front' },
+      { label: 'Contratos', href: 'https://github.com/ExcessHawk/marketplace-contracts' },
+    ],
     playground: true,
     status: 'terminado',
     accent: 'signal',
@@ -111,7 +117,7 @@ export const projects: Project[] = [
       'Avisa por baja de precio, vuelta de stock o entrada bajo el tope, nunca por repetición.',
       'Respeta los límites de cada tienda; las que piden reto de Cloudflare quedan desactivadas, no rodeadas.',
     ],
-    links: [{ label: 'Código', href: 'https://github.com/ExcessHawk' }],
+    links: [{ label: 'Privado', href: '#' }],
     status: 'activo',
     accent: 'ember',
   },
@@ -128,7 +134,7 @@ export const projects: Project[] = [
       'Historial médico, seguimientos y documentos ligados a cada paciente.',
       'Migración progresiva del backend sin tumbar el que ya funcionaba.',
     ],
-    links: [{ label: 'Código', href: 'https://github.com/ExcessHawk' }],
+    links: [{ label: 'Privado', href: '#' }],
     status: 'en-progreso',
     accent: 'wire',
   },
