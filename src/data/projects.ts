@@ -52,7 +52,7 @@ export const projects: Project[] = [
     body: 'Varias tiendas venden en un mismo sitio. Un pedido se parte en subpedidos, uno por vendedor, y cada uno sigue su propio camino: se envía, se recibe, se opina y se le paga al vendedor. El dinero no se mueve hasta que el comprador confirma que recibió. Vive en tres repos: la API, la interfaz y los esquemas de Zod que ambas comparten, para que un cambio de contrato rompa la compilación y no la producción.',
     stack: ['React', 'TypeScript', 'Veloce-TS', 'PostgreSQL', 'Drizzle', 'WebSocket'],
     metrics: [
-      { label: 'rutas HTTP', value: '71' },
+      { label: 'rutas HTTP', value: '79' },
       { label: 'tablas', value: '22' },
       { label: 'pruebas e2e', value: '355' },
     ],
@@ -129,9 +129,9 @@ export const projects: Project[] = [
     headline:
       'La respuesta llega token a token, se puede cortar a media frase, y cada turno deja contados sus tokens y su costo.',
     body: 'Un chat sobre la API de un modelo, con conversaciones persistidas y documentos adjuntos que entran al contexto. Lo construí para contestar una pregunta concreta sobre mi propio framework: si sus piezas de streaming y cancelación aguantan un caso real. Aguantan, y el camino dejó tres hallazgos escritos en el README.',
-    stack: ['React 19', 'assistant-ui', 'Veloce-TS', 'PostgreSQL', 'pgvector', 'shiki', 'Docker'],
+    stack: ['React 19', 'assistant-ui', 'Veloce-TS', 'PostgreSQL', 'Drizzle', 'shiki', 'Docker'],
     metrics: [
-      { label: 'rutas HTTP', value: '30' },
+      { label: 'rutas HTTP', value: '23' },
       { label: 'tablas', value: '8' },
       { label: 'aserciones', value: '44' },
     ],
@@ -141,7 +141,7 @@ export const projects: Project[] = [
       'El mensaje del asistente se inserta vacío antes del primer token. Si el proceso se cae a media respuesta queda el parcial, y no un hueco donde el usuario cree que escribió algo que nunca existió.',
       'El tope de gasto se revisa antes de llamar al modelo y contando los documentos adjuntos, que viajan en cada turno. Un bucle aquí no es un error de log: es una factura.',
       'Un yield por token hace que React re-renderice por carácter y el chat se traba justo cuando debería verse vivo; se agrupa por cuadro de 16 ms y se vuelca lo que quede al final.',
-      'El modelo vive detrás de una interfaz con dos adaptadores. La demostración pública corre con el falso a propósito: un chat abierto contra uno que se cobra por token es una factura esperando a que alguien la encuentre.',
+      'El modelo vive detrás de una interfaz con dos adaptadores. La demostración pública habla con Gemini de verdad, y lo que la hace sostenible no es la confianza sino el tope: el gasto se revisa antes de cada llamada y el adaptador falso sigue ahí para las pruebas, que no deberían costar dinero.',
     ],
     links: [
       { label: 'Verlo en vivo', href: 'https://chat.alfredomejia.com.mx' },
@@ -162,7 +162,7 @@ export const projects: Project[] = [
     body: 'Tres roles con vistas distintas sobre los mismos datos. El paciente busca especialista, ve los consultorios sobre un mapa y agenda; el doctor publica sus horarios, atiende y registra la consulta; el administrador mira el conjunto. Nació como un backend en Express y está portado a Veloce-TS con Drizzle.',
     stack: ['React 19', 'Mantine', 'Veloce-TS', 'PostgreSQL', 'Drizzle', 'Leaflet', 'Docker'],
     metrics: [
-      { label: 'rutas HTTP', value: '32' },
+      { label: 'rutas HTTP', value: '34' },
       { label: 'tablas', value: '7' },
       { label: 'aserciones', value: '35' },
     ],

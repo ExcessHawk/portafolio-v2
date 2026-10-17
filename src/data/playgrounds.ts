@@ -259,7 +259,7 @@ const chatRoles: Role[] = [
     blurb: 'La pantalla del dinero: lo gastado en el periodo, el tope, y el costo de cada conversación.',
     tryThis: [
       'Mira cuántos tokens de entrada y de salida lleva el periodo.',
-      'Compara el precio por millón de los dos modelos.',
+      'Mira el precio por millón del modelo: ese número es el que alimenta el tope de gasto.',
     ],
   },
 ]
@@ -278,7 +278,7 @@ const chatRecipes: Recipe[] = [
     method: 'GET',
     path: '/api/models',
     title: 'Qué modelos hay y a qué precio',
-    note: 'Pública a propósito: la pantalla de entrada dice con qué se está hablando antes de pedirle a nadie que cree una cuenta. Aquí contesta un modelo simulado que no sale del servidor, porque un chat abierto contra uno de paga es una factura esperando a que alguien la encuentre.',
+    note: 'Pública a propósito: la pantalla de entrada dice con qué se está hablando antes de pedirle a nadie que cree una cuenta. El precio por millón que devuelve aquí es el mismo con el que se cobra cada turno y con el que se frena el tope de gasto.',
     auth: 'none',
   },
   {
@@ -349,6 +349,6 @@ export const playgrounds: Playground[] = [
     apiBase: CHAT_WEB,
     roles: chatRoles,
     recipes: chatRecipes,
-    nota: 'Contesta un modelo simulado que no sale del servidor: el canal, el conteo de tokens, el tope de gasto y el botón de parar son los de verdad; lo único inventado es quién escribe el texto. Se reinicia solo cada hora.',
+    nota: 'Contesta Gemini de verdad, con un tope de gasto que se revisa antes de cada llamada y un límite de peticiones por minuto. Se reinicia solo cada hora, así que lo que escribas no se queda.',
   },
 ]
