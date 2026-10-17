@@ -15,10 +15,17 @@ export type Recipe = {
   expect?: string
 }
 
+/**
+ * Lo que una receta puede dejarle a la siguiente.
+ *
+ * La consola sirve a varios proyectos, así que aquí caben los identificadores
+ * de todos: lo que no usa un proyecto se queda en null y no estorba.
+ */
 export type Context = {
   token: string | null
   productSlug: string | null
   variantId: string | null
+  conversationId: string | null
 }
 
 type Outcome = {
@@ -56,7 +63,12 @@ export default function ApiConsole({
   const [outcomes, setOutcomes] = useState<Outcome[]>([])
   const [running, setRunning] = useState<string | null>(null)
   const [openId, setOpenId] = useState<string | null>(null)
-  const ctxRef = useRef<Context>({ token: null, productSlug: null, variantId: null })
+  const ctxRef = useRef<Context>({
+    token: null,
+    productSlug: null,
+    variantId: null,
+    conversationId: null,
+  })
   const [hasSession, setHasSession] = useState(false)
 
   const byId = useMemo(() => {
@@ -144,7 +156,7 @@ export default function ApiConsole({
   }, [run, recipes])
 
   const reset = useCallback(() => {
-    ctxRef.current = { token: null, productSlug: null, variantId: null }
+    ctxRef.current = { token: null, productSlug: null, variantId: null, conversationId: null }
     setOutcomes([])
     setOpenId(null)
     setHasSession(false)

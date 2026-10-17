@@ -236,7 +236,91 @@ const citasRecipes: Recipe[] = [
   },
 ]
 
+const CHAT_WEB = (import.meta.env.PUBLIC_CHAT_WEB ?? 'http://localhost:5107').replace(/\/$/, '')
+
+const chatRoles: Role[] = [
+  {
+    id: 'usuario',
+    label: 'Usuario',
+    account: 'usuario@demo.chat.mx',
+    blurb:
+      'El chat entero: dos conversaciones con historia, un documento ya leído, y respuestas que llegan token a token.',
+    tryThis: [
+      'Escribe algo y mira cómo se pinta mientras llega, no de golpe.',
+      'Vuelve a preguntar y dale a Parar a media respuesta: lo que alcanzó a escribirse se queda.',
+      'Abre la primera conversación: trae un documento adjunto que el modelo puede leer.',
+      'Adjunta un PDF o un .md tuyo y pregúntale por su contenido.',
+    ],
+  },
+  {
+    id: 'administrador',
+    label: 'Administrador',
+    account: 'admin@demo.chat.mx',
+    blurb: 'La pantalla del dinero: lo gastado en el periodo, el tope, y el costo de cada conversación.',
+    tryThis: [
+      'Mira cuántos tokens de entrada y de salida lleva el periodo.',
+      'Compara el precio por millón de los dos modelos.',
+    ],
+  },
+]
+
+const chatRecipes: Recipe[] = [
+  {
+    id: 'chat-salud',
+    method: 'GET',
+    path: '/health',
+    title: 'Preguntar si la API vive',
+    note: 'Ruta pública, sin sesión.',
+    auth: 'none',
+  },
+  {
+    id: 'chat-modelos',
+    method: 'GET',
+    path: '/api/models',
+    title: 'Qué modelos hay y a qué precio',
+    note: 'Pública a propósito: la pantalla de entrada dice con qué se está hablando antes de pedirle a nadie que cree una cuenta. Aquí contesta un modelo simulado que no sale del servidor, porque un chat abierto contra uno de paga es una factura esperando a que alguien la encuentre.',
+    auth: 'none',
+  },
+  {
+    id: 'chat-sesion',
+    method: 'POST',
+    path: '/api/demo/session',
+    title: 'Entrar sin contraseña',
+    note: 'El bypass de la demostración, con cuatro candados: la bandera DEMO_MODE, el dominio del correo, la columna is_demo y una comprobación más antes de firmar nada.',
+    body: { role: 'usuario' },
+    auth: 'none',
+    capture: (data) => ({ token: data?.token ?? null }),
+  },
+  {
+    id: 'chat-conversaciones',
+    method: 'GET',
+    path: '/api/conversations',
+    title: 'Listar conversaciones',
+    note: 'Cada una trae cuántos mensajes lleva y cuánto ha costado, contado de sus propias filas.',
+    auth: 'token',
+    capture: (data) => ({ conversationId: String(data?.conversations?.[0]?.id ?? '') || null }),
+  },
+  {
+    id: 'chat-adjuntos',
+    method: 'GET',
+    path: '/api/conversations/:id/attachments',
+    title: 'Los documentos de esa conversación',
+    resolvePath: (ctx) => `/api/conversations/${ctx.conversationId ?? '0'}/attachments`,
+    note: 'Dice cuánto TEXTO arrastra cada uno, no cuánto pesa el archivo: ese texto viaja al modelo en cada turno, así que es lo que se paga una y otra vez.',
+    auth: 'token',
+  },
+  {
+    id: 'chat-consumo',
+    method: 'GET',
+    path: '/api/usage',
+    title: 'Lo gastado en el periodo',
+    note: 'El tope se revisa ANTES de llamar al modelo, no después. Un bucle aquí no es un error de log: es una factura.',
+    auth: 'token',
+  },
+]
+
 export const playgrounds: Playground[] = [
+
   {
     slug: 'marketplace',
     nombre: 'Marketplace multivendedor',
@@ -256,5 +340,15 @@ export const playgrounds: Playground[] = [
     roles: citasRoles,
     recipes: citasRecipes,
     nota: 'Pacientes, doctores y citas inventados. Los datos se reinician solos cada hora, y nadie recibe correos de verdad.',
+  },
+  {
+    slug: 'chat',
+    nombre: 'Chat con IA',
+    resumen: 'Respuestas token a token, cancelables, con documentos adjuntos y el costo contado.',
+    demoWeb: CHAT_WEB,
+    apiBase: CHAT_WEB,
+    roles: chatRoles,
+    recipes: chatRecipes,
+    nota: 'Contesta un modelo simulado que no sale del servidor: el canal, el conteo de tokens, el tope de gasto y el botón de parar son los de verdad; lo único inventado es quién escribe el texto. Se reinicia solo cada hora.',
   },
 ]

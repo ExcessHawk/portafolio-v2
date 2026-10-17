@@ -122,6 +122,37 @@ export const projects: Project[] = [
     accent: 'ember',
   },
   {
+    slug: 'chat-ia',
+    name: 'Chat con IA en streaming',
+    kind: 'Aplicación full-stack',
+    year: '2026',
+    headline:
+      'La respuesta llega token a token, se puede cortar a media frase, y cada turno deja contados sus tokens y su costo.',
+    body: 'Un chat sobre la API de un modelo, con conversaciones persistidas y documentos adjuntos que entran al contexto. Lo construí para contestar una pregunta concreta sobre mi propio framework: si sus piezas de streaming y cancelación aguantan un caso real. Aguantan, y el camino dejó tres hallazgos escritos en el README.',
+    stack: ['React 19', 'assistant-ui', 'Veloce-TS', 'PostgreSQL', 'pgvector', 'shiki', 'Docker'],
+    metrics: [
+      { label: 'rutas HTTP', value: '30' },
+      { label: 'tablas', value: '8' },
+      { label: 'aserciones', value: '44' },
+    ],
+    highlights: [
+      'Cancelar corta la generación, no solo la pantalla: si solo se cierra el canal, el servidor sigue produciendo tokens que ya nadie va a leer pero que sí se cobran.',
+      'Lo difícil de eso fue que el bucle del proveedor termine no quiere decir que la respuesta terminara: un adaptador que corta limpio al abortar sale por el mismo camino que uno que acabó. Lo que distingue los dos casos es la señal.',
+      'El mensaje del asistente se inserta vacío antes del primer token. Si el proceso se cae a media respuesta queda el parcial, y no un hueco donde el usuario cree que escribió algo que nunca existió.',
+      'El tope de gasto se revisa antes de llamar al modelo y contando los documentos adjuntos, que viajan en cada turno. Un bucle aquí no es un error de log: es una factura.',
+      'Un yield por token hace que React re-renderice por carácter y el chat se traba justo cuando debería verse vivo; se agrupa por cuadro de 16 ms y se vuelca lo que quede al final.',
+      'El modelo vive detrás de una interfaz con dos adaptadores. La demostración pública corre con el falso a propósito: un chat abierto contra uno que se cobra por token es una factura esperando a que alguien la encuentre.',
+    ],
+    links: [
+      { label: 'Verlo en vivo', href: 'https://chat.alfredomejia.com.mx' },
+      { label: 'API', href: 'https://github.com/ExcessHawk/aichat-back' },
+      { label: 'Interfaz', href: 'https://github.com/ExcessHawk/aichat-front' },
+    ],
+    playground: true,
+    status: 'terminado',
+    accent: 'signal',
+  },
+  {
     slug: 'citas-medicas',
     name: 'Sistema de citas médicas',
     kind: 'Aplicación full-stack',

@@ -54,6 +54,7 @@ export default function Playground() {
         demoWeb={actual.demoWeb}
         roles={actual.roles}
         nota={actual.nota}
+        nombre={actual.nombre}
       />
 
       <div className="pt-11">

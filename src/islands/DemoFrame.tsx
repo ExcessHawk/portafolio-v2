@@ -15,10 +15,13 @@ export default function DemoFrame({
   demoWeb,
   roles,
   nota,
+  nombre,
 }: {
   demoWeb: string
   roles: Role[]
   nota: string
+  /** El proyecto que se está mirando. Va en el título del marco. */
+  nombre: string
 }) {
   const [role, setRole] = useState<Role>(roles[0]!)
   const [started, setStarted] = useState(false)
@@ -134,7 +137,7 @@ export default function DemoFrame({
             <iframe
               key={`${role.id}-${nonce}`}
               src={src}
-              title={`Demostración del marketplace como ${role.label.toLowerCase()}`}
+              title={`Demostración de ${nombre} como ${role.label.toLowerCase()}`}
               onLoad={onLoaded}
               loading="lazy"
               className="size-full border-0"
