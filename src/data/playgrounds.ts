@@ -145,6 +145,97 @@ const marketplaceRoles: Role[] = [
   },
 ]
 
+const CITAS_WEB = (import.meta.env.PUBLIC_CITAS_WEB ?? 'http://localhost:3000').replace(/\/$/, '')
+
+const citasRoles: Role[] = [
+  {
+    id: 'paciente',
+    label: 'Paciente',
+    account: 'paciente@demo.citas.mx',
+    blurb:
+      'Entras como alguien que busca consulta. El catálogo de doctores, el mapa y la agenda son los de verdad.',
+    tryThis: [
+      'Abre Doctores y cambia a la vista de mapa.',
+      'Toca un marcador y agenda desde ahí.',
+      'Mira tus citas: hay pasadas, una cancelada y dos próximas.',
+      'Lee tu historial médico, con signos vitales y una alergia registrada.',
+    ],
+  },
+  {
+    id: 'doctor',
+    label: 'Doctor',
+    account: 'doctor@demo.citas.mx',
+    blurb: 'La consulta del otro lado: lo agendado, los horarios y lo que se escribe de cada paciente.',
+    tryThis: [
+      'Revisa las citas que te agendaron.',
+      'Abre el historial de un paciente y escribe una consulta.',
+      'Ajusta tus horarios disponibles.',
+    ],
+  },
+  {
+    id: 'admin',
+    label: 'Administrador',
+    account: 'admin@demo.citas.mx',
+    blurb: 'La vista de la clínica: usuarios, doctores y las estadísticas del conjunto.',
+    tryThis: ['Mira las estadísticas.', 'Revisa el padrón de usuarios y doctores.'],
+  },
+]
+
+const citasRecipes: Recipe[] = [
+  {
+    id: 'citas-salud',
+    method: 'GET',
+    path: '/health',
+    title: 'Preguntar si la API vive',
+    note: 'Ruta pública, sin sesión.',
+    auth: 'none',
+  },
+  {
+    id: 'citas-doctores',
+    method: 'GET',
+    path: '/api/doctors',
+    title: 'Listar doctores',
+    note: 'Cada uno trae latitud y longitud: es lo que el mapa dibuja. Las coordenadas admiten nulo, y entonces ese consultorio no aparece.',
+    auth: 'none',
+  },
+  {
+    id: 'citas-401',
+    method: 'GET',
+    path: '/api/appointments',
+    title: 'Pedir las citas sin sesión',
+    note: 'El guard corta antes de que la petición toque la base.',
+    auth: 'strip',
+    expect: '401',
+  },
+  {
+    id: 'citas-sesion',
+    method: 'POST',
+    path: '/api/demo/session',
+    title: 'Pedir una sesión de paciente',
+    note: 'Sin contraseña, y solo porque corre con DEMO_MODE encendido. Apagado, este endpoint no existe: responde 404.',
+    auth: 'none',
+    body: { role: 'paciente' },
+    capture: (data) => ({ token: data?.token ?? null }),
+  },
+  {
+    id: 'citas-mias',
+    method: 'GET',
+    path: '/api/appointments',
+    title: 'Pedir las citas, ya con sesión',
+    note: 'Mismo endpoint que falló hace dos pasos. Ahora responde, con citas en varios estados.',
+    auth: 'token',
+  },
+  {
+    id: 'citas-admin-403',
+    method: 'GET',
+    path: '/api/admin/stats',
+    title: 'Asomarse al panel de la clínica',
+    note: 'La sesión es de paciente y el panel pide rol de administrador. El guard corta en la puerta.',
+    auth: 'token',
+    expect: '403',
+  },
+]
+
 export const playgrounds: Playground[] = [
   {
     slug: 'marketplace',
@@ -155,5 +246,15 @@ export const playgrounds: Playground[] = [
     roles: marketplaceRoles,
     recipes: marketplaceRecipes,
     nota: 'Los datos son de juguete y se reinician solos cada hora. No hay cobros reales: el proveedor de pagos es uno falso que firma sus propios webhooks.',
+  },
+  {
+    slug: 'citas',
+    nombre: 'Citas médicas',
+    resumen: 'Agenda clínica con mapa de consultorios, historial y tres roles.',
+    demoWeb: CITAS_WEB,
+    apiBase: CITAS_WEB,
+    roles: citasRoles,
+    recipes: citasRecipes,
+    nota: 'Pacientes, doctores y citas inventados. Los datos se reinician solos cada hora, y nadie recibe correos de verdad.',
   },
 ]

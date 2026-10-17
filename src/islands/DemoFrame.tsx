@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 
 export type Role = {
-  id: 'comprador' | 'vendedor' | 'admin'
+  // Cada proyecto nombra sus roles: comprador y vendedor en un marketplace,
+  // paciente y doctor en una clínica. El valor viaja tal cual en /demo?rol=…
+  id: string
   label: string
   account: string
   blurb: string
