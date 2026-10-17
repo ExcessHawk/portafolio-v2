@@ -129,17 +129,19 @@ export const projects: Project[] = [
     headline:
       'Agenda clínica: el paciente ve en el mapa dónde queda el consultorio y reserva; el doctor atiende y escribe el historial.',
     body: 'Tres roles con vistas distintas sobre los mismos datos. El paciente busca especialista, ve los consultorios sobre un mapa y agenda; el doctor publica sus horarios, atiende y registra la consulta; el administrador mira el conjunto. Nació como un backend en Express y está portado a Veloce-TS con Drizzle.',
-    stack: ['React 19', 'Veloce-TS', 'PostgreSQL', 'Drizzle', 'Leaflet', 'Docker'],
+    stack: ['React 19', 'Mantine', 'Veloce-TS', 'PostgreSQL', 'Drizzle', 'Leaflet', 'Docker'],
     metrics: [
       { label: 'rutas HTTP', value: '32' },
       { label: 'tablas', value: '7' },
-      { label: 'aserciones', value: '21' },
+      { label: 'aserciones', value: '26' },
     ],
     highlights: [
       'Un horario no se reserva dos veces: un índice único sobre doctor, fecha y hora lo impide en la base, no solo en el código.',
       'El rol no basta para autorizar: ser doctor no da acceso a la cita de otro, así que cada handler comprueba la pertenencia.',
       'El mapa es Leaflet sobre OpenStreetMap, no Google: una llave de Google viajaría en el JavaScript del navegador.',
       'Las coordenadas admiten nulo; un consultorio sin geocodificar no rompe el mapa, y la interfaz lo dice.',
+      'Cancelar pide el motivo y lo guarda: quien recibe el aviso se entera de por qué, no solo de que la cita desapareció.',
+      'La tabla de citas se vuelve tarjetas en el teléfono: cinco columnas a 390 px obligan a arrastrar de lado para alcanzar las acciones.',
       'Recordatorios por correo a las 08:00, con el límite conocido de que viven en el proceso.',
     ],
     links: [
