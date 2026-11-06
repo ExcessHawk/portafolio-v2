@@ -101,7 +101,7 @@ export const projects: Project[] = [
     ],
     links: [
       { label: 'Verlo en vivo', href: 'https://futbol.alfredomejia.com.mx' },
-      { label: 'Privado', href: '#' },
+      { label: 'Código', href: 'https://github.com/ExcessHawk/futbol-analytics' },
     ],
     status: 'terminado',
     accent: 'ember',
