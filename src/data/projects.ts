@@ -81,12 +81,12 @@ export const projects: Project[] = [
     year: '2026',
     headline:
       'Un modelo que predice partidos, validado contra 34,018 resultados reales — y que pierde contra el mercado de apuestas. La app lo dice en cada predicción.',
-    body: 'Dashboard de ocho ligas con un modelo Dixon-Coles, más un analizador de boletos de apuestas por foto. Lo interesante no es el modelo: es la validación. Backtest walk-forward, hiperparámetros elegidos en temporadas que nunca se puntúan, e intervalos de confianza en cada comparación. El resultado fue que no le gana a las casas de apuestas, y eso es lo que está escrito en el README y en la pantalla.',
-    stack: ['Python', 'Streamlit', 'PostgreSQL', 'pandas', 'SciPy', 'OpenCV', 'Tesseract', 'Docker'],
+    body: 'Dashboard de ocho ligas con un modelo Dixon-Coles, alineaciones probables dibujadas sobre el campo y un analizador de boletos de apuestas por foto. Lo interesante no es el modelo: es la validación. Backtest walk-forward, hiperparámetros elegidos en temporadas que nunca se puntúan, e intervalos de confianza en cada comparación. Cada cosa que predice lleva al lado qué tan bien lo hace, incluso cuando la respuesta incomoda: el modelo no le gana a las casas de apuestas, y eso está escrito en el README y en la pantalla.',
+    stack: ['Python', 'Streamlit', 'PostgreSQL', 'pandas', 'NumPy', 'SciPy', 'scikit-learn', 'Altair', 'mplsoccer', 'OpenCV', 'Tesseract', 'API-Football', 'Docker'],
     metrics: [
       { label: 'partidos validados', value: '34,018' },
       { label: 'ligas', value: '8' },
-      { label: 'pruebas', value: '55' },
+      { label: 'pruebas', value: '127' },
     ],
     highlights: [
       'El resultado honesto es el negativo: en 34,018 partidos fuera de muestra el modelo pierde contra las cuotas de cierre por 0.021 de log loss, con intervalo de confianza que no toca el cero. Publicarlo así vale más que un número bonito sin forma de comprobarlo.',
@@ -94,6 +94,8 @@ export const projects: Project[] = [
       'Los hiperparámetros se eligieron en 2013/14 y 2014/15, dos temporadas que después nunca se puntúan. Ajustarlos sobre lo mismo que se mide es medirse a uno mismo.',
       'Dixon-Coles apenas le gana a un Poisson simple (0.0004 de log loss): la corrección de marcadores bajos, que es toda la gracia del método, casi no mueve el 1X2. Está medido en vez de supuesto.',
       'Hay mercados donde sí aporta —tiros, tiros a puerta, tarjetas— y uno donde no se distingue de la media de la liga: córners. Ese también está en la tabla.',
+      'La alineación probable del próximo partido se arma con la formación del último, quién más ha ocupado cada puesto en seis jornadas y el parte de bajas. Acierta 8.3 de 11 titulares — y la pantalla dice también que repetir el once anterior acierta 8.2, que es la comparación que casi nadie publica porque deja ver lo poco que aporta el método.',
+      'El campo está dibujado en Altair y no como imagen, para que un clic sobre un jugador se pueda leer de vuelta y abra su temporada. Va en vertical a propósito: en el teléfono un campo horizontal obliga a girar la cabeza.',
       'El analizador de boletos lee la captura con OCR, reconoce partido, mercado y cuota, y calcula el valor esperado. Es la parte que más se ve y la que menos ciencia tiene.',
       'La calibración sí es buena: cuando dice 40%, ocurre cerca del 40% de las veces. Un modelo puede estar bien calibrado y aun así no servir para apostar, y las dos cosas están en la misma pantalla.',
     ],
@@ -232,6 +234,10 @@ export const stack = [
   {
     group: 'Datos e infraestructura',
     items: ['PostgreSQL', 'MongoDB', 'Redis', 'RabbitMQ', 'SQLite', 'Docker', 'Nginx', 'Git'],
+  },
+  {
+    group: 'Análisis de datos',
+    items: ['pandas', 'NumPy', 'SciPy', 'scikit-learn', 'Streamlit', 'Altair', 'OpenCV', 'Tesseract'],
   },
   {
     group: 'Práctica',
