@@ -133,6 +133,9 @@ export default function DemoFrame({
         </div>
 
         <div className="relative aspect-[16/11] w-full bg-ink-950">
+          {/* allow-scripts + allow-same-origin juntos relajan el sandbox, pero el
+              marco apunta a una demostración de primera parte (dominio propio,
+              datos de juguete que se reinician cada hora), no a contenido ajeno. */}
           {started ? (
             <iframe
               key={`${role.id}-${nonce}`}
@@ -160,7 +163,7 @@ export default function DemoFrame({
                   </button>
                 ))}
               </div>
-              <p className="font-mono text-[0.7rem] text-ink-600">
+              <p className="font-mono text-[0.7rem] text-ink-400">
                 Sin registro, sin contraseña, sin tarjeta.
               </p>
             </div>

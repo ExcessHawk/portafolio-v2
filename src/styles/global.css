@@ -10,6 +10,7 @@
   --color-ink-800: #161b24;
   --color-ink-700: #1f2632;
   --color-ink-600: #2b3442;
+  --color-ink-500: #414c5c;
   --color-ink-400: #5c6878;
   --color-ink-300: #8b97a7;
   --color-ink-200: #b7c0cc;
@@ -35,6 +36,9 @@
     color: var(--color-ink-200);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    /* Scale the fallback font to the web font's x-height so the swap on load
+       does not shift the layout (Baseline 2024). */
+    font-size-adjust: from-font;
   }
 
   ::selection {

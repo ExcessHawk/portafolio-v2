@@ -147,7 +147,7 @@ export default function ApiConsole({
     } finally {
       setRunning(null)
     }
-  }, [])
+  }, [apiBase])
 
   const runAll = useCallback(async () => {
     for (const recipe of recipes) {

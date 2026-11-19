@@ -31,7 +31,7 @@ import { site, experience, achievements } from '../data/site'
     id="proyectos"
     num="02"
     title="Proyectos"
-    lead="Siete cosas que construí de punta a punta. La primera es el framework sobre el que corren casi todas las demás."
+    lead="Nueve cosas que construí de punta a punta. La primera es el framework sobre el que corren casi todas las demás."
   >
     <h2 slot="heading" class="mb-4 text-balance text-3xl font-semibold text-ink-100 sm:text-4xl">
       Lo que he construido
@@ -151,6 +151,13 @@ import { site, experience, achievements } from '../data/site'
           >
             {site.email}
           </a>
+          <a
+            href="/cv.pdf"
+            download="CV-Alfredo-Mejia-Rosales.pdf"
+            class="inline-flex items-center gap-2 rounded-lg border border-ink-700 px-5 py-2.5 font-mono text-sm text-ink-200 transition-colors hover:border-ink-400 hover:text-ink-100"
+          >
+            Descargar CV <span aria-hidden="true">↓</span>
+          </a>
           <SocialLink kind="linkedin" href={site.linkedin} variant="button" />
           <SocialLink kind="github" href={site.github} variant="button" />
         </div>
@@ -158,21 +165,21 @@ import { site, experience, achievements } from '../data/site'
 
       <dl class="space-y-4 border-ink-800 font-mono text-sm sm:border-l sm:pl-8">
         <div>
-          <dt class="text-xs tracking-wider text-ink-600 uppercase">GitHub</dt>
+          <dt class="text-xs tracking-wider text-ink-400 uppercase">GitHub</dt>
           <dd class="mt-1"><SocialLink kind="github" href={site.github} label="ExcessHawk ↗" /></dd>
         </div>
         <div>
-          <dt class="text-xs tracking-wider text-ink-600 uppercase">npm</dt>
+          <dt class="text-xs tracking-wider text-ink-400 uppercase">npm</dt>
           <dd class="mt-1"><SocialLink kind="npm" href={site.npm} label="veloce-ts ↗" /></dd>
         </div>
         <div>
-          <dt class="text-xs tracking-wider text-ink-600 uppercase">LinkedIn</dt>
+          <dt class="text-xs tracking-wider text-ink-400 uppercase">LinkedIn</dt>
           <dd class="mt-1">
             <SocialLink kind="linkedin" href={site.linkedin} label="excesshawk ↗" />
           </dd>
         </div>
         <div>
-          <dt class="text-xs tracking-wider text-ink-600 uppercase">Disponibilidad</dt>
+          <dt class="text-xs tracking-wider text-ink-400 uppercase">Disponibilidad</dt>
           <dd class="mt-1 flex items-center gap-2 text-signal">
             <span class="size-1.5 rounded-full bg-signal"></span>
             abierto a propuestas

@@ -83,6 +83,14 @@ const facts = [
         >
           Ver proyectos
         </a>
+        <a
+          href="/cv.pdf"
+          download="CV-Alfredo-Mejia-Rosales.pdf"
+          class="inline-flex items-center gap-2 rounded-lg border border-ink-700 px-5 py-2.5 font-mono text-sm text-ink-200 transition-colors hover:border-ink-400 hover:text-ink-100"
+        >
+          Descargar CV
+          <span aria-hidden="true">↓</span>
+        </a>
         <SocialLink kind="github" href={site.github} variant="button" />
       </div>
 
@@ -90,7 +98,7 @@ const facts = [
         {
           facts.map((fact) => (
             <div>
-              <dt class="text-xs text-ink-600 uppercase tracking-wider">{fact.label}</dt>
+              <dt class="text-xs text-ink-400 uppercase tracking-wider">{fact.label}</dt>
               <dd class="mt-1 text-ink-200">{fact.value}</dd>
             </div>
           ))

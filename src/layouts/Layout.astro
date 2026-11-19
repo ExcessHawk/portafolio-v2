@@ -13,7 +13,26 @@ const {
   description = site.summary,
 } = Astro.props
 
-const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://alfredomejia.com.mx')
+const siteUrl = Astro.site ?? new URL('https://alfredomejia.com.mx')
+const canonical = new URL(Astro.url.pathname, siteUrl)
+const ogImage = new URL('/og.png', siteUrl)
+
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: siteUrl.href,
+  jobTitle: 'Full-Stack Engineer',
+  email: `mailto:${site.email}`,
+  description: site.summary,
+  worksFor: { '@type': 'Organization', name: 'CustomsCity' },
+  alumniOf: {
+    '@type': 'CollegeOrUniversity',
+    name: 'Instituto Tecnológico Superior de Huetamo',
+  },
+  knowsAbout: ['TypeScript', 'Bun', 'PostgreSQL', 'React', 'Node.js', 'Backend', 'APIs'],
+  sameAs: [site.github, site.linkedin, site.npm],
+}
 ---
 
 <!doctype html>
@@ -24,14 +43,26 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://alfredomeji
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:locale" content="es_MX" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name} — ${site.role}`} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
     <meta name="theme-color" content="#07090c" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script type="application/ld+json" set:html={JSON.stringify(personLd)} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -74,7 +105,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://alfredomeji
                   href={`#${section.id}`}
                   class="group flex items-center gap-1.5 rounded-md px-3 py-1.5 font-mono text-[0.8rem] text-ink-300 transition-colors hover:bg-ink-850 hover:text-ink-100"
                 >
-                  <span class="text-ink-600 transition-colors group-hover:text-signal">
+                  <span class="text-ink-400 transition-colors group-hover:text-signal">
                     {section.num}
                   </span>
                   {section.label}
@@ -111,7 +142,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://alfredomeji
           <SocialLink kind="mail" href={`mailto:${site.email}`} label="Email" />
         </p>
       </div>
-      <div class="border-t border-ink-800/60 px-5 py-4 text-center font-mono text-[0.7rem] text-ink-600">
+      <div class="border-t border-ink-800/60 px-5 py-4 text-center font-mono text-[0.7rem] text-ink-400">
         Hecho con Astro y Tailwind. El playground corre la aplicación de verdad.
         <a
           href="https://github.com/ExcessHawk/portafolio-v2"

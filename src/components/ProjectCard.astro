@@ -15,6 +15,12 @@ const accentText = {
   ember: 'text-ember',
 }[project.accent]
 
+const accentDot = {
+  signal: 'bg-signal',
+  wire: 'bg-wire',
+  ember: 'bg-ember',
+}[project.accent]
+
 const accentBorder = {
   signal: 'hover:border-signal/40',
   wire: 'hover:border-wire/40',
@@ -70,7 +76,7 @@ const statusLabel = {
         {project.metrics.map((metric) => (
           <div>
             <dd class={`font-mono text-xl font-semibold ${accentText}`}>{metric.value}</dd>
-            <dt class="mt-0.5 font-mono text-[0.7rem] tracking-wide text-ink-600 uppercase">
+            <dt class="mt-0.5 font-mono text-[0.7rem] tracking-wide text-ink-400 uppercase">
               {metric.label}
             </dt>
           </div>
@@ -83,7 +89,7 @@ const statusLabel = {
     {
       project.highlights.map((highlight) => (
         <li class="flex gap-3 text-sm leading-relaxed text-ink-300">
-          <span class={`mt-2 size-1 shrink-0 rounded-full ${accentText.replace('text-', 'bg-')}`} aria-hidden="true" />
+          <span class={`mt-2 size-1 shrink-0 rounded-full ${accentDot}`} aria-hidden="true" />
           {highlight}
         </li>
       ))
@@ -99,7 +105,7 @@ const statusLabel = {
       {
         project.links.map((link) =>
           link.href === '#' ? (
-            <span class="font-mono text-xs text-ink-600">código privado</span>
+            <span class="font-mono text-xs text-ink-400">código privado</span>
           ) : (
             <a
               href={link.href}
