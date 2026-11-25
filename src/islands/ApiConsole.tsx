@@ -1,4 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
+import type { ApiDict } from '../i18n/island'
+
+type ApiT = ApiDict
 
 export type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE'
 
@@ -48,17 +51,19 @@ const statusTone = (status: number | 'red') => {
   return 'text-rose-alert'
 }
 
-const pretty = (value: unknown) => {
+const pretty = (value: unknown, truncated: string) => {
   const text = JSON.stringify(value, null, 2) ?? 'null'
-  return text.length > 2600 ? `${text.slice(0, 2600)}\n… (recortado)` : text
+  return text.length > 2600 ? `${text.slice(0, 2600)}\n${truncated}` : text
 }
 
 export default function ApiConsole({
   apiBase,
   recipes,
+  t,
 }: {
   apiBase: string
   recipes: Recipe[]
+  t: ApiT
 }) {
   const [outcomes, setOutcomes] = useState<Outcome[]>([])
   const [running, setRunning] = useState<string | null>(null)
@@ -122,7 +127,7 @@ export default function ApiConsole({
           url,
           method: recipe.method,
           sentAuth,
-          body: pretty(parsed),
+          body: pretty(parsed, t.truncated),
         },
       ])
       setOpenId(recipe.id)
@@ -137,17 +142,14 @@ export default function ApiConsole({
           method: recipe.method,
           sentAuth,
           body: '',
-          error:
-            error instanceof Error
-              ? error.message
-              : 'No se pudo alcanzar la API de demostración.',
+          error: error instanceof Error ? error.message : t.unreachable,
         },
       ])
       setOpenId(recipe.id)
     } finally {
       setRunning(null)
     }
-  }, [apiBase])
+  }, [apiBase, t])
 
   const runAll = useCallback(async () => {
     for (const recipe of recipes) {
@@ -167,7 +169,7 @@ export default function ApiConsole({
       <div className="panel-head flex flex-wrap items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center gap-2 font-mono text-xs text-ink-300">
           <span className="size-2 rounded-full bg-signal" aria-hidden="true" />
-          <span className="text-ink-100">consola de API</span>
+          <span className="text-ink-100">{t.title}</span>
           <span className="hidden text-ink-600 sm:inline">{apiBase}</span>
         </div>
 
@@ -179,7 +181,7 @@ export default function ApiConsole({
                 : 'border-ink-700 text-ink-400'
             }`}
           >
-            sesión {hasSession ? 'activa' : 'sin iniciar'}
+            {t.session} {hasSession ? t.active : t.inactive}
           </span>
           <button
             type="button"
@@ -187,14 +189,14 @@ export default function ApiConsole({
             disabled={running !== null}
             className="rounded-md bg-signal px-3 py-1.5 font-mono text-xs font-semibold text-ink-950 transition-opacity disabled:opacity-50"
           >
-            {running ? 'corriendo…' : `Correr los ${recipes.length} pasos`}
+            {running ? t.running : t.runAll(recipes.length)}
           </button>
           <button
             type="button"
             onClick={reset}
             className="rounded-md border border-ink-700 px-3 py-1.5 font-mono text-xs text-ink-300 transition-colors hover:border-ink-400 hover:text-ink-100"
           >
-            Limpiar
+            {t.clear}
           </button>
         </div>
       </div>
@@ -236,10 +238,10 @@ export default function ApiConsole({
                     className="flex items-center gap-2 font-mono text-xs"
                   >
                     <span className={statusTone(outcome.status)}>
-                      {outcome.status === 'red' ? 'sin red' : outcome.status}
+                      {outcome.status === 'red' ? t.noNetwork : outcome.status}
                     </span>
                     <span className="text-ink-600">{outcome.ms} ms</span>
-                    {expected && <span className="text-signal">esperado</span>}
+                    {expected && <span className="text-signal">{t.expected}</span>}
                     <span className="text-ink-600">{isOpen ? '▾' : '▸'}</span>
                   </button>
                 )}
@@ -250,7 +252,7 @@ export default function ApiConsole({
                   disabled={running !== null}
                   className="rounded-md border border-ink-700 px-2.5 py-1 font-mono text-[0.7rem] text-ink-300 transition-colors hover:border-signal hover:text-signal disabled:opacity-40"
                 >
-                  {running === recipe.id ? '…' : 'correr'}
+                  {running === recipe.id ? '…' : t.run}
                 </button>
               </div>
 
@@ -263,16 +265,13 @@ export default function ApiConsole({
                   <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[0.7rem] text-ink-600">
                     <span>{outcome.url}</span>
                     <span>
-                      Authorization: {outcome.sentAuth ? 'Bearer …' : 'no enviado'}
+                      Authorization: {outcome.sentAuth ? t.authSent : t.authNotSent}
                     </span>
                   </div>
                   {outcome.error ? (
                     <p className="font-mono text-xs leading-relaxed text-rose-alert">
                       {outcome.error}
-                      <span className="mt-2 block text-ink-400">
-                        La demostración vive en un servidor aparte. Si está dormida o tu red la
-                        bloquea, esta consola lo dice en vez de fingir una respuesta.
-                      </span>
+                      <span className="mt-2 block text-ink-400">{t.errorHelp}</span>
                     </p>
                   ) : (
                     <pre className="max-h-72 overflow-auto font-mono text-[0.72rem] leading-relaxed text-ink-300">

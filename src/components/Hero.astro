@@ -1,6 +1,16 @@
 ---
-import { site } from '../data/site'
+import type { Lang } from '../i18n/ui'
+import { ui } from '../i18n/ui'
+import { content } from '../i18n/content'
 import SocialLink from './SocialLink.astro'
+
+interface Props {
+  lang: Lang
+}
+
+const { lang } = Astro.props
+const t = ui[lang]
+const { site } = content(lang)
 
 const dim = (text: string) => `<span class="text-ink-600">${text}</span>`
 const key = (text: string) => `<span class="text-wire">${text}</span>`
@@ -8,7 +18,7 @@ const fn = (text: string) => `<span class="text-ember">${text}</span>`
 const val = (text: string) => `<span class="text-signal">${text}</span>`
 
 const codeHtml = [
-  dim('// el stock no se vende dos veces'),
+  dim(t.hero.codeComment),
   `${key('const')} taken = ${key('await')} tx`,
   '  .update(variants)',
   `  .set({ stock: sql\`stock - ${val('${qty}')}\` })`,
@@ -24,13 +34,6 @@ const codeHtml = [
   `  ${key('throw')} ${key('new')} ${fn('Conflict')}(${val('&#39;out_of_stock&#39;')})`,
   '}',
 ].join('\n')
-
-
-const facts = [
-  { label: 'ubicación', value: 'Morelia, MX · remoto' },
-  { label: 'ahora', value: 'Full-Stack en CustomsCity' },
-  { label: 'publicado', value: 'veloce-ts@3.5.1 en npm' },
-]
 ---
 
 <section id="top" class="relative overflow-hidden border-b border-ink-800">
@@ -52,7 +55,7 @@ const facts = [
           ></span>
           <span class="relative inline-flex size-2 rounded-full bg-signal"></span>
         </span>
-        Abierto a oportunidades
+        {t.hero.badge}
       </p>
 
       <h1 class="text-balance text-5xl leading-[1.05] font-bold tracking-tight text-ink-100 sm:text-6xl">
@@ -64,9 +67,9 @@ const facts = [
       </p>
 
       <p class="mt-4 max-w-xl leading-relaxed text-ink-400">
-        Ingeniero en Sistemas Computacionales. Escribo TypeScript sobre Bun y PostgreSQL. Publiqué
+        {t.hero.introPre}
         <a href={site.npm} class="text-ink-100 underline decoration-signal/50 underline-offset-4 transition-colors hover:text-signal">Veloce-TS</a>
-        en npm y lo uso para construir lo que ves más abajo.
+        {t.hero.introPost}
       </p>
 
       <div class="mt-8 flex flex-wrap gap-3">
@@ -74,21 +77,21 @@ const facts = [
           href="#playground"
           class="group inline-flex items-center gap-2 rounded-lg bg-signal px-5 py-2.5 font-mono text-sm font-semibold text-ink-950 transition-transform hover:-translate-y-0.5"
         >
-          Probar un proyecto
+          {t.hero.ctaTry}
           <span class="transition-transform group-hover:translate-x-0.5" aria-hidden="true">→</span>
         </a>
         <a
           href="#proyectos"
           class="inline-flex items-center gap-2 rounded-lg border border-ink-700 px-5 py-2.5 font-mono text-sm text-ink-200 transition-colors hover:border-ink-400 hover:text-ink-100"
         >
-          Ver proyectos
+          {t.hero.ctaProjects}
         </a>
         <a
           href="/cv.pdf"
           download="CV-Alfredo-Mejia-Rosales.pdf"
           class="inline-flex items-center gap-2 rounded-lg border border-ink-700 px-5 py-2.5 font-mono text-sm text-ink-200 transition-colors hover:border-ink-400 hover:text-ink-100"
         >
-          Descargar CV
+          {t.hero.ctaCv}
           <span aria-hidden="true">↓</span>
         </a>
         <SocialLink kind="github" href={site.github} variant="button" />
@@ -96,7 +99,7 @@ const facts = [
 
       <dl class="mt-10 grid gap-x-8 gap-y-3 border-t border-ink-800 pt-6 font-mono text-sm sm:grid-cols-3">
         {
-          facts.map((fact) => (
+          t.hero.facts.map((fact) => (
             <div>
               <dt class="text-xs text-ink-400 uppercase tracking-wider">{fact.label}</dt>
               <dd class="mt-1 text-ink-200">{fact.value}</dd>
@@ -117,7 +120,7 @@ const facts = [
       <pre class="overflow-x-auto p-4 leading-relaxed text-ink-300"><code set:html={codeHtml} /></pre>
 
       <div class="border-t border-ink-700 bg-ink-850 px-4 py-2.5 text-xs text-ink-400">
-        <span class="text-signal">●</span> 355 pruebas end-to-end en verde
+        <span class="text-signal">●</span> {t.hero.codeCaption}
       </div>
     </div>
   </div>

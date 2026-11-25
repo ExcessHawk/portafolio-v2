@@ -1,0 +1,167 @@
+---
+import type { Lang } from '../i18n/ui'
+import { ui } from '../i18n/ui'
+import { content } from '../i18n/content'
+import Hero from './Hero.astro'
+import Section from './Section.astro'
+import ProjectCard from './ProjectCard.astro'
+import TechChip from './TechChip.astro'
+import SocialLink from './SocialLink.astro'
+import Playground from '../islands/Playground'
+
+interface Props {
+  lang: Lang
+}
+
+const { lang } = Astro.props
+const t = ui[lang]
+const { site, projects, stack, experience, achievements } = content(lang)
+---
+
+<Hero lang={lang} />
+
+<Section id="playground" num={t.copy.playground.num} title={t.copy.playground.title} lead={t.copy.playground.lead}>
+  <h2 slot="heading" class="mb-4 text-balance text-3xl font-semibold text-ink-100 sm:text-4xl">
+    {t.copy.playground.heading}
+  </h2>
+
+  <Playground client:visible lang={lang} />
+</Section>
+
+<Section id="proyectos" num={t.copy.proyectos.num} title={t.copy.proyectos.title} lead={t.copy.proyectos.lead}>
+  <h2 slot="heading" class="mb-4 text-balance text-3xl font-semibold text-ink-100 sm:text-4xl">
+    {t.copy.proyectos.heading}
+  </h2>
+
+  <div class="space-y-6">
+    {projects.map((project, index) => <ProjectCard project={project} featured={index < 2} lang={lang} />)}
+  </div>
+</Section>
+
+<Section id="stack" num={t.copy.stack.num} title={t.copy.stack.title} lead={t.copy.stack.lead}>
+  <h2 slot="heading" class="mb-4 text-balance text-3xl font-semibold text-ink-100 sm:text-4xl">
+    {t.copy.stack.heading}
+  </h2>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      stack.map((group) => (
+        <div class="panel p-5">
+          <p class="mb-3 font-mono text-xs tracking-wider text-ink-500 uppercase">{group.group}</p>
+          <ul class="flex flex-wrap gap-1.5">
+            {group.items.map((item) => <TechChip name={item} size="md" />)}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</Section>
+
+<Section id="trayectoria" num={t.copy.trayectoria.num} title={t.copy.trayectoria.title} lead={t.copy.trayectoria.lead}>
+  <h2 slot="heading" class="mb-4 text-balance text-3xl font-semibold text-ink-100 sm:text-4xl">
+    {t.copy.trayectoria.heading}
+  </h2>
+
+  <div class="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
+    <ol class="relative space-y-8 border-l border-ink-800 pl-6">
+      {
+        experience.map((job) => (
+          <li class="relative">
+            <span
+              class="absolute top-1.5 -left-[1.6rem] size-2.5 rounded-full border-2 border-ink-950 bg-signal"
+              aria-hidden="true"
+            />
+            <p class="font-mono text-xs text-ink-500">{job.date}</p>
+            <h3 class="mt-1 text-lg font-semibold text-ink-100">
+              {job.title}
+              <span class="text-ink-500"> · {job.company}</span>
+            </h3>
+            <ul class="mt-2 space-y-1.5">
+              {job.points.map((point) => (
+                <li class="text-sm leading-relaxed text-ink-400">{point}</li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="space-y-4">
+      <div class="panel p-5">
+        <p class="mb-4 font-mono text-xs tracking-wider text-ink-500 uppercase">{t.trayectoria.formacion}</p>
+        <h3 class="text-lg font-semibold text-ink-100">{t.trayectoria.degree}</h3>
+        <p class="mt-1 text-sm text-ink-400">{t.trayectoria.school}</p>
+      </div>
+
+      <div class="panel p-5">
+        <p class="mb-4 font-mono text-xs tracking-wider text-ink-500 uppercase">{t.trayectoria.reconocimientos}</p>
+        <ul class="space-y-3">
+          {
+            achievements.map((item) => (
+              <li class="flex gap-3">
+                <span class="font-mono text-xs text-signal">{item.icon}</span>
+                <span class="text-sm leading-relaxed">
+                  <span class="text-ink-100">{item.title}</span>
+                  <span class="text-ink-500"> — {item.detail}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<Section id="contacto" num={t.copy.contacto.num} title={t.copy.contacto.title}>
+  <h2 slot="heading" class="mb-4 text-balance text-3xl font-semibold text-ink-100 sm:text-4xl">
+    {t.copy.contacto.heading}
+  </h2>
+
+  <div class="panel grid gap-8 p-8 sm:grid-cols-[1.2fr_1fr] sm:p-10">
+    <div>
+      <p class="text-balance text-xl leading-relaxed text-ink-200">{t.contacto.pitch}</p>
+      <p class="mt-4 leading-relaxed text-ink-400">{site.location}{t.contacto.locationLine}</p>
+
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a
+          href={`mailto:${site.email}`}
+          class="rounded-lg bg-signal px-5 py-2.5 font-mono text-sm font-semibold text-ink-950 transition-transform hover:-translate-y-0.5"
+        >
+          {site.email}
+        </a>
+        <a
+          href="/cv.pdf"
+          download="CV-Alfredo-Mejia-Rosales.pdf"
+          class="inline-flex items-center gap-2 rounded-lg border border-ink-700 px-5 py-2.5 font-mono text-sm text-ink-200 transition-colors hover:border-ink-400 hover:text-ink-100"
+        >
+          {t.contacto.cv} <span aria-hidden="true">↓</span>
+        </a>
+        <SocialLink kind="linkedin" href={site.linkedin} variant="button" />
+        <SocialLink kind="github" href={site.github} variant="button" />
+      </div>
+    </div>
+
+    <dl class="space-y-4 border-ink-800 font-mono text-sm sm:border-l sm:pl-8">
+      <div>
+        <dt class="text-xs tracking-wider text-ink-400 uppercase">{t.contacto.labelGithub}</dt>
+        <dd class="mt-1"><SocialLink kind="github" href={site.github} label="ExcessHawk ↗" /></dd>
+      </div>
+      <div>
+        <dt class="text-xs tracking-wider text-ink-400 uppercase">{t.contacto.labelNpm}</dt>
+        <dd class="mt-1"><SocialLink kind="npm" href={site.npm} label="veloce-ts ↗" /></dd>
+      </div>
+      <div>
+        <dt class="text-xs tracking-wider text-ink-400 uppercase">{t.contacto.labelLinkedin}</dt>
+        <dd class="mt-1"><SocialLink kind="linkedin" href={site.linkedin} label="excesshawk ↗" /></dd>
+      </div>
+      <div>
+        <dt class="text-xs tracking-wider text-ink-400 uppercase">{t.contacto.labelAvailability}</dt>
+        <dd class="mt-1 flex items-center gap-2 text-signal">
+          <span class="size-1.5 rounded-full bg-signal"></span>
+          {t.contacto.availabilityValue}
+        </dd>
+      </div>
+    </dl>
+  </div>
+</Section>

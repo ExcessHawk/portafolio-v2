@@ -109,6 +109,11 @@ const MAP: Record<string, () => TechIcon> = {
   'Código seguro': () => custom['security']!,
   'Pentesting web': () => custom['pentest']!,
   'CI/CD': () => custom['cicd']!,
+
+  // English aliases for the "Practice" chips, so the icon still resolves on /en.
+  'E2E tests': () => custom['tests']!,
+  'Secure code': () => custom['security']!,
+  'Web pentesting': () => custom['pentest']!,
 }
 
 export function techIcon(name: string): TechIcon | null {

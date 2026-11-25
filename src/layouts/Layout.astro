@@ -1,21 +1,30 @@
 ---
 import '../styles/global.css'
-import { site, sections } from '../data/site'
+import type { Lang } from '../i18n/ui'
+import { ui, altPath } from '../i18n/ui'
+import { content } from '../i18n/content'
 import SocialLink from '../components/SocialLink.astro'
 
 interface Props {
+  lang: Lang
   title?: string
   description?: string
 }
 
-const {
-  title = `${site.name} — Full-Stack Engineer`,
-  description = site.summary,
-} = Astro.props
+const { lang, title: titleProp, description: descProp } = Astro.props
+const t = ui[lang]
+const { site } = content(lang)
+
+const title = titleProp ?? t.meta.title
+const description = descProp ?? t.meta.description
 
 const siteUrl = Astro.site ?? new URL('https://alfredomejia.com.mx')
 const canonical = new URL(Astro.url.pathname, siteUrl)
 const ogImage = new URL('/og.png', siteUrl)
+
+// The same page in both locales, for hreflang and the language toggle.
+const esUrl = new URL('/', siteUrl)
+const enUrl = new URL('/en/', siteUrl)
 
 const personLd = {
   '@context': 'https://schema.org',
@@ -24,7 +33,7 @@ const personLd = {
   url: siteUrl.href,
   jobTitle: 'Full-Stack Engineer',
   email: `mailto:${site.email}`,
-  description: site.summary,
+  description,
   worksFor: { '@type': 'Organization', name: 'CustomsCity' },
   alumniOf: {
     '@type': 'CollegeOrUniversity',
@@ -36,7 +45,7 @@ const personLd = {
 ---
 
 <!doctype html>
-<html lang="es" class="scheme-dark">
+<html lang={t.htmlLang} class="scheme-dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -45,12 +54,15 @@ const personLd = {
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="es" href={esUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={esUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:locale" content="es_MX" />
+    <meta property="og:locale" content={t.ogLocale} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -76,7 +88,7 @@ const personLd = {
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-signal focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-ink-950"
     >
-      Saltar al contenido
+      {t.skip}
     </a>
 
     <header
@@ -99,7 +111,7 @@ const personLd = {
 
         <ul class="hidden items-center gap-1 md:flex">
           {
-            sections.map((section) => (
+            t.sections.map((section) => (
               <li>
                 <a
                   href={`#${section.id}`}
@@ -115,12 +127,22 @@ const personLd = {
           }
         </ul>
 
-        <a
-          href={`mailto:${site.email}`}
-          class="rounded-md border border-ink-700 px-3 py-1.5 font-mono text-[0.8rem] text-ink-200 transition-colors hover:border-signal hover:text-signal"
-        >
-          Escríbeme
-        </a>
+        <div class="flex items-center gap-2">
+          <a
+            href={altPath(lang)}
+            hreflang={lang === 'es' ? 'en' : 'es'}
+            aria-label={t.nav.toggleAria}
+            class="rounded-md border border-ink-700 px-2.5 py-1.5 font-mono text-[0.8rem] text-ink-300 transition-colors hover:border-signal hover:text-signal"
+          >
+            {t.nav.toggleLabel}
+          </a>
+          <a
+            href={`mailto:${site.email}`}
+            class="rounded-md border border-ink-700 px-3 py-1.5 font-mono text-[0.8rem] text-ink-200 transition-colors hover:border-signal hover:text-signal"
+          >
+            {t.nav.write}
+          </a>
+        </div>
       </nav>
     </header>
 
@@ -139,18 +161,18 @@ const personLd = {
           <SocialLink kind="github" href={site.github} />
           <SocialLink kind="linkedin" href={site.linkedin} />
           <SocialLink kind="npm" href={site.npm} label="veloce-ts" />
-          <SocialLink kind="mail" href={`mailto:${site.email}`} label="Email" />
+          <SocialLink kind="mail" href={`mailto:${site.email}`} label={t.footer.email} />
         </p>
       </div>
       <div class="border-t border-ink-800/60 px-5 py-4 text-center font-mono text-[0.7rem] text-ink-400">
-        Hecho con Astro y Tailwind. El playground corre la aplicación de verdad.
+        {t.footer.made}
         <a
           href="https://github.com/ExcessHawk/portafolio-v2"
           target="_blank"
           rel="noopener noreferrer"
           class="ml-1 underline decoration-ink-700 underline-offset-4 transition-colors hover:text-signal hover:decoration-signal"
         >
-          El código de esta página ↗
+          {t.footer.code}
         </a>
       </div>
     </footer>

@@ -1,13 +1,17 @@
 ---
 import type { Project } from '../data/projects'
+import type { Lang } from '../i18n/ui'
+import { ui } from '../i18n/ui'
 import TechChip from './TechChip.astro'
 
 interface Props {
   project: Project
   featured?: boolean
+  lang?: Lang
 }
 
-const { project, featured = false } = Astro.props
+const { project, featured = false, lang = 'es' } = Astro.props
+const t = ui[lang].card
 
 const accentText = {
   signal: 'text-signal',
@@ -27,11 +31,7 @@ const accentBorder = {
   ember: 'hover:border-ember/40',
 }[project.accent]
 
-const statusLabel = {
-  activo: 'en desarrollo activo',
-  terminado: 'terminado',
-  'en-progreso': 'en progreso',
-}[project.status]
+const statusLabel = t.status[project.status]
 ---
 
 <article
@@ -58,7 +58,7 @@ const statusLabel = {
           class="inline-flex items-center gap-2 rounded-full border border-signal/40 bg-signal/10 px-3 py-1.5 font-mono text-xs text-signal transition-colors hover:bg-signal/20"
         >
           <span class="size-1.5 rounded-full bg-signal" aria-hidden="true" />
-          pruébalo arriba
+          {t.tryAbove}
         </a>
       )
     }
@@ -105,7 +105,7 @@ const statusLabel = {
       {
         project.links.map((link) =>
           link.href === '#' ? (
-            <span class="font-mono text-xs text-ink-400">código privado</span>
+            <span class="font-mono text-xs text-ink-400">{t.privateCode}</span>
           ) : (
             <a
               href={link.href}

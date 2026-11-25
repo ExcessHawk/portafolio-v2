@@ -1,9 +1,13 @@
 import { useRef, useState, type KeyboardEvent } from 'react'
-import { playgrounds } from '../data/playgrounds'
+import { getPlaygrounds } from '../data/playgrounds'
+import { island } from '../i18n/island'
+import type { Lang } from '../i18n/ui'
 import ApiConsole from './ApiConsole'
 import DemoFrame from './DemoFrame'
 
-export default function Playground() {
+export default function Playground({ lang = 'es' }: { lang?: Lang }) {
+  const playgrounds = getPlaygrounds(lang)
+  const t = island[lang]
   const [slug, setSlug] = useState(playgrounds[0]!.slug)
   const actual = playgrounds.find((p) => p.slug === slug) ?? playgrounds[0]!
   const varios = playgrounds.length > 1
@@ -35,9 +39,9 @@ export default function Playground() {
       <div
         className="flex flex-wrap items-center gap-2"
         role={varios ? 'tablist' : undefined}
-        aria-label={varios ? 'Proyecto a probar' : undefined}
+        aria-label={varios ? t.pg.tablistLabel : undefined}
       >
-        <span className="mr-1 font-mono text-xs text-ink-500">proyecto</span>
+        <span className="mr-1 font-mono text-xs text-ink-500">{t.pg.project}</span>
 
         {playgrounds.map((proyecto, index) => {
           const activo = proyecto.slug === actual.slug
@@ -69,9 +73,7 @@ export default function Playground() {
           )
         })}
 
-        <span className="font-mono text-xs text-ink-400">
-          los demás entran aquí conforme se terminan
-        </span>
+        <span className="font-mono text-xs text-ink-400">{t.pg.more}</span>
       </div>
 
       <div
@@ -90,22 +92,20 @@ export default function Playground() {
           roles={actual.roles}
           nota={actual.nota}
           nombre={actual.nombre}
+          t={t.demo}
         />
 
         <div className="pt-11">
           <h3 className="mb-3 text-balance text-2xl font-semibold text-ink-100">
-            Y esto es lo que pasa por debajo
+            {t.pg.belowHeading}
           </h3>
-          <p className="mb-6 max-w-2xl leading-relaxed text-ink-400">
-            Un iframe enseña el frontend. Esta consola enseña el backend:{' '}
-            {actual.recipes.length} peticiones reales contra la misma API, encadenadas, con la
-            respuesta tal como llega. Incluidas las que fallan a propósito.
-          </p>
+          <p className="mb-6 max-w-2xl leading-relaxed text-ink-400">{t.pg.belowLead(actual.recipes.length)}</p>
 
           <ApiConsole
             key={`consola-${actual.slug}`}
             apiBase={actual.apiBase}
             recipes={actual.recipes}
+            t={t.api}
           />
         </div>
       </div>
